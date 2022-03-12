@@ -71,3 +71,20 @@ export const deletePost = async (req, res) => {
     });
   }
 };
+
+export const updatePost = async (req, res) => {
+  const { id } = req.params;
+  const post = req.body;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).send("No Post with this ID!!!");
+  }
+  const updatedPost = await PostMessage.findByIdAndUpdate(
+    id,
+    {
+      ...post,
+      id,
+    },
+    { new: true }
+  );
+  res.json({ updatedPost });
+};

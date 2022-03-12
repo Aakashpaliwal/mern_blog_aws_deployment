@@ -6,16 +6,36 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { CardMedia, Container, Divider, Grid } from "@mui/material";
+import { CardMedia, Container, Divider, Grid, TextField } from "@mui/material";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import { Link } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import ClipLoader from "react-spinners/ClipLoader";
+import FileBase64 from "react-file-base64";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
 const ViewPost = () => {
   const [posts, setPosts] = useState(null);
   const [showAllBlog, setShowAllBlog] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [postData, setPostData] = useState(null);
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const inputRef = useRef();
 
@@ -25,6 +45,11 @@ const ViewPost = () => {
   //     countRef.current += 1;
   //   };
   //   console.log("I rendered", countRef.current, "times");
+
+  const modalHandler = (id) => {
+    setPostData(posts.find((post) => post._id === id));
+    handleOpen();
+  };
 
   const getPosts = async () => {
     setLoading(true);
@@ -64,6 +89,27 @@ const ViewPost = () => {
     console.log("deleteresult", deleteResult);
     if (deleteResult.status === 200) {
       getPostByUser();
+    }
+  };
+
+  const submitHandler = async (event) => {
+    event.preventDefault();
+    // console.log(postData);
+    const result = await axios.patch(
+      `http://localhost:5000/api/posts/updatePost/${postData._id}`,
+      postData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+          Authorization: "Bearer " + sessionStorage.getItem("token"),
+        },
+      }
+    );
+    console.log("result", result);
+    if (result.status === 200) {
+      getPostByUser();
+      handleClose();
     }
   };
 
@@ -155,6 +201,14 @@ const ViewPost = () => {
                               >
                                 Delete
                               </Button>
+                              <Button
+                                variant="outlined"
+                                size="small"
+                                startIcon={<EditIcon />}
+                                onClick={() => modalHandler(post._id)}
+                              >
+                                Edit
+                              </Button>
                             </Stack>
                           ) : (
                             <Fragment>
@@ -170,6 +224,73 @@ const ViewPost = () => {
             </Fragment>
           )}
         </Grid>
+
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <form onSubmit={submitHandler}>
+              <div>
+                <TextField
+                  id="standard-basic"
+                  label="title"
+                  name="title"
+                  variant="standard"
+                  fullWidth={true}
+                  value={postData && postData.title}
+                  onChange={(e) =>
+                    setPostData({ ...postData, title: e.target.value })
+                  }
+                />
+              </div>
+
+              <div style={{ marginTop: 20, marginBottom: 20 }}>
+                <TextField
+                  minRows={4}
+                  id="standard-basic"
+                  label="content"
+                  name="content"
+                  variant="standard"
+                  multiline
+                  fullWidth={true}
+                  value={postData && postData.content}
+                  onChange={(e) =>
+                    setPostData({ ...postData, content: e.target.value })
+                  }
+                />
+              </div>
+              <div style={{ float: "left", marginBottom: 20 }}>
+                <FileBase64
+                  multiple={false}
+                  // onDone={({ base64 }) =>
+                  //   setState({ ...state, image: base64 })
+                  // }
+                  onDone={({ base64 }) =>
+                    setPostData({ ...postData, image: base64 })
+                  }
+                />
+                {/* <Button variant="contained" component="label">
+                    Upload File
+                    <input type="file" hidden />
+                  </Button> */}
+              </div>
+
+              <Button
+                variant="contained"
+                className="submit_btn"
+                color="primary"
+                size="large"
+                type="submit"
+                fullWidth
+              >
+                Submit
+              </Button>
+            </form>
+          </Box>
+        </Modal>
       </Container>
     </Fragment>
   );
