@@ -15,6 +15,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import ClipLoader from "react-spinners/ClipLoader";
 import FileBase64 from "react-file-base64";
+import { useTheme } from "@mui/system";
 
 const style = {
   position: "absolute",
@@ -29,6 +30,7 @@ const style = {
 };
 
 const ViewPost = () => {
+  const theme = useTheme();
   const [posts, setPosts] = useState(null);
   const [showAllBlog, setShowAllBlog] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -177,7 +179,7 @@ const ViewPost = () => {
                           image={post.image}
                           alt="green iguana"
                         />
-                        <CardContent style={{ height: 100 }}>
+                        <CardContent style={{ height: 130 }}>
                           <Typography gutterBottom variant="h5" component="div">
                             {post.title}
                           </Typography>

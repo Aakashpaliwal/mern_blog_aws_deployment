@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import "./header.scss";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -14,6 +14,11 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import decode from "jwt-decode";
+import { useTheme } from "@mui/material";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import { ColorModeContext } from "../../ColorModeContext";
+import { MaterialUISwitch } from "../../Utils/Utils";
 
 // const pages = ["Products", "Pricing", "Blog"];
 const pages = [
@@ -32,7 +37,13 @@ const pages = [
 ];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
-const Header = () => {
+const Header = ({ setToggleDark, toggleDark }) => {
+  const theme = useTheme();
+  console.log("theme", theme);
+
+  const colorMode = useContext(ColorModeContext);
+  console.log("colorMode", colorMode);
+
   const navigate = useNavigate();
   const location = useLocation();
   const [user, setUser] = useState(
@@ -54,6 +65,10 @@ const Header = () => {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleModeChange = () => {
+    setToggleDark(!toggleDark);
   };
 
   useEffect(() => {
@@ -154,7 +169,19 @@ const Header = () => {
               })}
             </Box>
 
-            <Box sx={{ flexGrow: 0 }}>
+            <Box sx={{ flexGrow: 0 }} style={{ display: "contents" }}>
+              <MaterialUISwitch onChange={colorMode.toggleColorMode} />
+              {/* <IconButton
+                sx={{ ml: 1 }}
+                onClick={colorMode.toggleColorMode}
+                color="inherit"
+              >
+                {theme.palette.mode === "dark" ? (
+                  <Brightness7Icon />
+                ) : (
+                  <Brightness4Icon />
+                )}
+              </IconButton> */}
               <Tooltip title="Open settings">
                 {user ? (
                   <Fragment>
