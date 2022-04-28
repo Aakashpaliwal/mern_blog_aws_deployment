@@ -146,7 +146,7 @@ const ViewPost = () => {
                 variant="outlined"
                 onClick={() => setShowAllBlog(!showAllBlog)}
               >
-                {showAllBlog ? "Show My Blogs" : "Show All Blogs"}
+                {showAllBlog ? "Show Mynn Blogs" : "Show All Blogs"}
               </Button>
 
               <Link to="/">
