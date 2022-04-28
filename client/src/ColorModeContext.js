@@ -25,11 +25,14 @@ export default function ToggleColorMode({ children }) {
             default: mode === "light" ? "#fff" : "#222222",
           },
         },
-        // typography: {
-        //   h5: {
-        //     color: mode === "light" ? "#000" : "#616161",
-        //   },
-        // },
+        typography: {
+          // h5: {
+          //   color: mode === "light" ? "#000" : "#bbbbbb",
+          // },
+          // body2 : {
+          //   color: mode === "light" ? "#000" : "#3e3e3e",
+          // }
+        },
       }),
     [mode]
   );

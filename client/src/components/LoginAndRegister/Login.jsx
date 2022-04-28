@@ -14,6 +14,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "../../Utils/api";
 
 const theme = createTheme();
 
@@ -28,7 +29,7 @@ const Login = () => {
 
     try {
       const result = await axios.post(
-        "http://localhost:5000/api/users/login",
+        `${API_URL}api/users/login`,
         state
       );
       console.log("login result==", result);

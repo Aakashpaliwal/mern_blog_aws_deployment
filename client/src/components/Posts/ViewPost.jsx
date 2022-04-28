@@ -16,6 +16,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import ClipLoader from "react-spinners/ClipLoader";
 import FileBase64 from "react-file-base64";
 import { useTheme } from "@mui/system";
+import { API_URL } from "../../Utils/api";
 
 const style = {
   position: "absolute",
@@ -55,7 +56,7 @@ const ViewPost = () => {
 
   const getPosts = async () => {
     setLoading(true);
-    const posts = await axios.get("http://localhost:5000/api/posts/allPosts");
+    const posts = await axios.get(`${API_URL}api/posts/allPosts`);
     console.log("posts==", posts);
     if (posts) {
       setPosts(posts.data);
@@ -66,7 +67,7 @@ const ViewPost = () => {
   const getPostByUser = async () => {
     setLoading(true);
     const singlePostsresult = await axios.get(
-      `http://localhost:5000/api/posts/allPosts/${sessionStorage.getItem(
+      `${API_URL}api/posts/allPosts/${sessionStorage.getItem(
         "userId"
       )}`
     );
@@ -79,7 +80,7 @@ const ViewPost = () => {
 
   const deleteHandler = async (id) => {
     const deleteResult = await axios.delete(
-      `http://localhost:5000/api/posts/deletePost/${id}`,
+      `${API_URL}api/posts/deletePost/${id}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -98,7 +99,7 @@ const ViewPost = () => {
     event.preventDefault();
     // console.log(postData);
     const result = await axios.patch(
-      `http://localhost:5000/api/posts/updatePost/${postData._id}`,
+      `${API_URL}api/posts/updatePost/${postData._id}`,
       postData,
       {
         headers: {
@@ -180,7 +181,7 @@ const ViewPost = () => {
                           alt="green iguana"
                         />
                         <CardContent style={{ height: 130 }}>
-                          <Typography gutterBottom variant="h5" component="div">
+                          <Typography gutterBottom variant="h6" component="div">
                             {post.title}
                           </Typography>
                           <Typography

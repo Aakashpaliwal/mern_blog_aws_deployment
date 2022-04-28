@@ -7,6 +7,7 @@ import { Button, Container, TextField } from "@mui/material";
 import FileBase64 from "react-file-base64";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../../Utils/api";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -28,7 +29,7 @@ const AddPost = () => {
     event.preventDefault();
     console.log(state);
     const result = await axios.post(
-      "http://localhost:5000/api/posts/addPost",
+      `${API_URL}api/posts/addPost`,
       state,
       {
         headers: {

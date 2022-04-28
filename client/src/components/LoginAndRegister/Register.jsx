@@ -12,6 +12,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
+import { API_URL } from "../../Utils/api";
 
 const theme = createTheme();
 
@@ -29,7 +30,7 @@ const Register = () => {
     console.log(state);
     try {
       const result = await axios.post(
-        "http://localhost:5000/api/users/register",
+        `${API_URL}api/users/register`,
         state
       );
       console.log("result==", result);
